@@ -24,8 +24,9 @@ server.on('connection',socket => {
       return;
     }
     for (let id in sockets){
+      let date = new Date();
       if(id !== socket.id.toString()){
-        sockets[id].write(`${socket.name}:${data}`);
+        sockets[id].write(`${socket.name}(${date.getHours()}:${date.getMinutes()}):${data}`);
       }
     }
   });

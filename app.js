@@ -9,12 +9,18 @@ server.on('connection',socket => {
   socket.id = count++;
   if(!(socket.id in sockets)){
     sockets[socket.id] = socket;
-    socket.write('welcome\n');
-    socket.write('Enter your name');
+    socket.write('Enter your name\n');
   }
   socket.on('data',data => {
     if(!socket.name){
       socket.name = data.trim();
+      socket.write(`Welcome ${socket.name}!!!\n`);
+      console.log(`${socket.name} joined`);
+      for (let id in sockets){
+        if(id !== socket.id.toString()){
+          sockets[id].write(`${socket.name} joined the chat\n`);
+        }
+      }
       return;
     }
     for (let id in sockets){
@@ -27,6 +33,7 @@ server.on('connection',socket => {
   socket.on('end',() => {
     console.log(`connection ended: ${socket.name}`);
     delete sockets[socket.id];
+
   });
 
   socket.setEncoding('utf8');
